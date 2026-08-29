@@ -1,0 +1,36 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environments
+myenv/
+venv/
+.venv/
+
+# Generated data
+*.npz
+*.npy
+
+# Videos
+*.mp4
+*.mov
+*.avi
+
+# Archives
+*.zip
+
+# Logs
+*.log
+MUJOCO_LOG.TXT
+
+# PDFs
+*.pdf
+
+# IDE
+.vscode/
+.idea/

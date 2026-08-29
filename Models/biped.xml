@@ -1,0 +1,87 @@
+<mujoco model="simple_biped">
+  <compiler angle="degree" coordinate="local" inertiafromgeom="true"/>
+  <option timestep="0.002" gravity="0 0 -9.81" integrator="RK4"/>
+  <size njmax="2000" nconmax="400"/>
+  <default>
+    <joint limited="true" damping="1" armature="0.02"/>
+    <geom friction="1.0 0.1 0.01" solref="0.004 1" solimp="0.9 0.95 0.001"
+          condim="4" rgba="0.7 0.7 0.7 1"/>
+    <motor ctrllimited="false" ctrlrange="-100 100"/>
+  </default>
+
+  <asset>
+    <texture name="texplane" type="2d" builtin="checker" rgb1="0.2 0.3 0.2" rgb2="0.1 0.2 0.1"
+             width="512" height="512"/>
+    <material name="matplane" texture="texplane" texrepeat="5 5" reflectance="0.1"/>
+  </asset>
+
+  <worldbody>
+    <light pos="0 0 3" dir="0 0 -1"/>
+    <geom name="floor" type="plane" size="5 5 0.1" material="matplane" rgba="1 1 1 1"/>
+
+    <!-- Free-floating torso -->
+    <body name="torso" pos="0 0 1.05">
+      <freejoint/>
+      <geom name="torso_geom" type="capsule" fromto="0 0 0.05  0 0 0.35" size="0.08" rgba="0.2 0.2 0.8 1"/>
+      <geom name="pelvis_geom" type="box" pos="0 0 0.0" size="0.12 0.08 0.05" rgba="0.2 0.2 0.8 1"/>
+
+      <!-- LEFT LEG -->
+      <body name="left_thigh" pos="0 0.10 0.0">
+        <!-- Hip: pitch (around y) -->
+        <joint name="left_hip" type="hinge" axis="0 1 0" range="-60 60"/>
+        <geom type="capsule" fromto="0 0 0  0 0 -0.35" size="0.05" rgba="0.8 0.2 0.2 1"/>
+
+        <body name="left_shin" pos="0 0 -0.35">
+          <!-- Knee: pitch -->
+          <joint name="left_knee" type="hinge" axis="0 1 0" range="-5 120"/>
+          <geom type="capsule" fromto="0 0 0  0 0 -0.35" size="0.045" rgba="0.8 0.4 0.2 1"/>
+
+          <body name="left_foot" pos="0 0 -0.35">
+            <!-- Ankle: pitch -->
+            <joint name="left_ankle" type="hinge" axis="0 1 0" range="-45 45"/>
+            <!-- Foot -->
+            <geom name="left_foot_geom" type="box" pos="0.07 0 -0.03" size="0.10 0.045 0.03"
+                  rgba="0.2 0.2 0.2 1"/>
+            <!-- Optional toe contact point (small sphere) -->
+            <geom name="left_toe" type="sphere" pos="0.17 0 -0.06" size="0.015" rgba="0.2 0.2 0.2 1"/>
+          </body>
+        </body>
+      </body>
+
+      <!-- RIGHT LEG -->
+      <body name="right_thigh" pos="0 -0.10 0.0">
+        <joint name="right_hip" type="hinge" axis="0 1 0" range="-60 60"/>
+        <geom type="capsule" fromto="0 0 0  0 0 -0.35" size="0.05" rgba="0.8 0.2 0.2 1"/>
+
+        <body name="right_shin" pos="0 0 -0.35">
+          <joint name="right_knee" type="hinge" axis="0 1 0" range="-5 120"/>
+          <geom type="capsule" fromto="0 0 0  0 0 -0.35" size="0.045" rgba="0.8 0.4 0.2 1"/>
+
+          <body name="right_foot" pos="0 0 -0.35">
+            <joint name="right_ankle" type="hinge" axis="0 1 0" range="-45 45"/>
+            <geom name="right_foot_geom" type="box" pos="0.07 0 -0.03" size="0.10 0.045 0.03"
+                  rgba="0.2 0.2 0.2 1"/>
+            <geom name="right_toe" type="sphere" pos="0.17 0 -0.06" size="0.015" rgba="0.2 0.2 0.2 1"/>
+          </body>
+        </body>
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <!-- Torque motors on each hinge joint -->
+    <motor name="m_left_hip" joint="left_hip" gear="120" ctrlrange="-100 100"/>
+    <motor name="m_left_knee" joint="left_knee" gear="120" ctrlrange="-100 100"/>
+    <motor name="m_left_ankle" joint="left_ankle" gear="80"  ctrlrange="-100 100"/>
+    <motor name="m_right_hip" joint="right_hip" gear="120" ctrlrange="-100 100"/>
+    <motor name="m_right_knee" joint="right_knee" gear="120" ctrlrange="-100 100"/>
+    <motor name="m_right_ankle" joint="right_ankle" gear="80"  ctrlrange="-100 100"/>
+  </actuator>
+
+  <!-- Helpful initial pose: slightly bent knees -->
+  <keyframe>
+    <key name="stand_init"
+         qpos="0 0 1.05  1 0 0 0   0  20 -10   0  20 -10"
+         ctrl="0 0 0 0 0 0"/>
+  </keyframe>
+</mujoco>

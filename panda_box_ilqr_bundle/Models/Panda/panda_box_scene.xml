@@ -1,0 +1,64 @@
+<mujoco model="panda_box_ilqr_scene">
+  <include file="panda_torque.xml"/>
+
+  <statistic center="0.2 0 0.5" extent="1.2"/>
+
+  <visual>
+    <headlight diffuse="0.7 0.7 0.7"
+               ambient="0.35 0.35 0.35"
+               specular="0.1 0.1 0.1"/>
+    <rgba haze="0.15 0.20 0.25 1"/>
+    <global azimuth="135"
+            elevation="-20"
+            offwidth="1280"
+            offheight="720"/>
+  </visual>
+
+  <asset>
+    <texture name="skybox"
+             type="skybox"
+             builtin="gradient"
+             rgb1="0.28 0.40 0.55"
+             rgb2="0.02 0.03 0.05"
+             width="512"
+             height="3072"/>
+
+    <texture name="groundplane"
+             type="2d"
+             builtin="checker"
+             mark="edge"
+             rgb1="0.20 0.22 0.25"
+             rgb2="0.10 0.12 0.15"
+             markrgb="0.8 0.8 0.8"
+             width="300"
+             height="300"/>
+
+    <material name="groundplane"
+              texture="groundplane"
+              texuniform="true"
+              texrepeat="5 5"
+              reflectance="0.15"/>
+
+    <material name="target_material"
+              rgba="0.95 0.18 0.12 0.85"/>
+  </asset>
+
+  <worldbody>
+    <geom name="ground"
+          type="plane"
+          size="2 2 0.1"
+          material="groundplane"
+          pos="0 0 0"
+          contype="0"
+          conaffinity="0"/>
+
+    <!-- Reachable Cartesian target for the end-effector site. -->
+    <geom name="target"
+          type="sphere"
+          pos="0.45 0.20 0.55"
+          size="0.035"
+          material="target_material"
+          contype="0"
+          conaffinity="0"/>
+  </worldbody>
+</mujoco>

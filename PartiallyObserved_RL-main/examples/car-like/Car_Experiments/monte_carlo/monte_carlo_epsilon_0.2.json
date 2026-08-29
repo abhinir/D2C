@@ -1,0 +1,8 @@
+{
+  "epsilon": 0.2,
+  "num_runs": 1,
+  "mean_cost": NaN,
+  "std_cost": NaN,
+  "valid_runs": 0,
+  "all_costs": []
+}
